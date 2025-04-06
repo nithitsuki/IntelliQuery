@@ -1,1 +1,3 @@
-monza\devs\Main.class
+monza\devs\config\DatabaseInitializer.class
+monza\devs\InitTest.class
+monza\devs\App.class

@@ -1,1 +1,9 @@
-C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\Main.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\App.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\cli\CLIApp.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\config\DatabaseConfig.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\config\DatabaseInitializer.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\controller\QueryController.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\InitTest.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\model\QueryRequest.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\service\DatabaseService.java
+C:\Users\Nithil\Documents\Github\sem2-projects\OOP\aplha001\src\main\java\monza\devs\service\LLMService.java
