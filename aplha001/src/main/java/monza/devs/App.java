@@ -1,23 +1,18 @@
 package monza.devs;
 
-import java.io.IOException;
 import java.util.Scanner;
-
-import org.json.JSONObject;
-import org.springframework.boot.SpringApplication;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import monza.devs.service.LLMService;
+import okhttp3.OkHttpClient;
+
 @SpringBootApplication
 public class App {
-    final static String Model = "tinyllama";
+    final static String MODEL = "deepseek-coder-v2";
+    final static String OLLAMA_API_URL = "http://localhost:11434/api/generate";
+
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
         OkHttpClient client = new OkHttpClient();
@@ -32,28 +27,10 @@ public class App {
                 break;
             }
             
-            String prompt = "{\"model\": \"";
-            prompt += Model;
-            prompt += "\", ";
-            prompt += "\"prompt\": \"";
-            prompt += userPrompt; // enter prompt here
-            prompt += "\", \"stream\": false}";
-            RequestBody body = RequestBody.create(prompt, MediaType.get("application/json"));
+            String response = LLMService.getOllamaResponse(MODEL, userPrompt, OLLAMA_API_URL);
+            
+            System.out.println("Ollama says: " + response);
 
-            Request request = new Request.Builder()
-                    .url("http://localhost:11434/api/generate")
-                    .post(body)
-                    .build();
-            String RB = "{\"response\": \"Default\"}";
-            try (Response response = client.newCall(request).execute()) {
-                System.out.println("Response Code: " + response.code());
-                RB = response.body().string();
-            } catch (IOException e) {
-                System.err.println("Error: " + e.getMessage());
-            }
-            JSONObject jsonResponse = new JSONObject(RB);
-            String extractedResponse = jsonResponse.getString("response");
-            System.out.println("Extracted Response: " + extractedResponse);
         }
         scanner.close();
     }
