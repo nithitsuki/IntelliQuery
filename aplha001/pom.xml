@@ -2,46 +2,52 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>monza.devs</groupId>
-    <artifactId>aplha001</artifactId>
+    <artifactId>alpha001</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- ✅ Let Spring Boot manage all the versions -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version> <!-- You can change this to latest if needed -->
+        <relativePath/> <!-- leave this -->
+    </parent>
+
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
-        <!-- JDBC and Spring Boot -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>7.0.0-M3</version>
-        </dependency>
+        <!-- ✅ Core Spring Boot Starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>3.4.4</version>
         </dependency>
 
-        <!-- Context support for AnnotationConfigApplicationContext -->
+        <!-- ✅ REST API Support -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>6.1.6</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- JDBC driver -->
+        <!-- ✅ JDBC Support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!-- ✅ MariaDB JDBC Driver -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.5.3</version>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- OkHttp and JSON -->
+        <!-- ✅ OkHttp and JSON -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
@@ -54,9 +60,15 @@
         </dependency>
     </dependencies>
 
-    <!-- ✅ Add this plugin for running your InitTest -->
     <build>
         <plugins>
+            <!-- ✅ Spring Boot Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- ✅ For running CLI main classes if needed -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -67,4 +79,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

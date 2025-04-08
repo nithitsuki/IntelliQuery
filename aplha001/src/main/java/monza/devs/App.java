@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import org.json.JSONObject;
+import org.springframework.boot.SpringApplication;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -11,9 +12,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class App {
     final static String Model = "tinyllama";
     public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
         OkHttpClient client = new OkHttpClient();
         Scanner scanner = new Scanner(System.in);
 
