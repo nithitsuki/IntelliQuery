@@ -37,7 +37,7 @@ public class LLMService {
      * System.out.println(response);
      * }</pre>
      */
-    public String getOllamaResponse(String MODEL, String userPrompt, String OLLAMA_API_URL) {
+    public String getOllamaResponse(String MODEL, String OLLAMA_API_URL, String userPrompt){
         // Build JSON request body
         JSONObject promptJson = new JSONObject();
         promptJson.put("model", MODEL);
