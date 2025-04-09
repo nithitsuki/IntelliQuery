@@ -42,18 +42,19 @@ public class LLMService {
      * System.out.println(response);
      * }</pre>
      */
-    public String getOllamaResponse(String MODEL, String OLLAMA_API_URL, String userPrompt){
-        // Build JSON request body
-        JSONObject promptJson = new JSONObject();
-        promptJson.put("model", MODEL);
-        promptJson.put("prompt", userPrompt);
-        promptJson.put("stream", false);
-        String prompt = promptJson.toString();
-
-        // System.out.println(prompt);
-        
-        // Create request body
-        RequestBody body = RequestBody.create(prompt, MediaType.get("application/json"));
+    public String getOllamaResponse(String MODEL, String OLLAMA_API_URL, String userPrompt) {
+        RequestBody body = null;
+        try {
+            JSONObject promptJson = new JSONObject();
+            promptJson.put("model", MODEL);
+            promptJson.put("prompt", userPrompt);
+            promptJson.put("stream", false);
+            String prompt = promptJson.toString();
+            // System.out.println(prompt);
+            body = RequestBody.create(prompt, MediaType.get("application/json"));
+        } catch (org.json.JSONException e) {
+            throw new RuntimeException("Error while building JSON request body: " + e.getMessage(), e);
+        }
 
         // Build HTTP request
         Request request = new Request.Builder()
@@ -75,8 +76,13 @@ public class LLMService {
         }
 
         // Parse JSON and return extracted response
-        JSONObject jsonResponse = new JSONObject(rawResponse);
-        return jsonResponse.optString("response", "No response recieved from ollama");
+        try {
+            JSONObject jsonResponse = new JSONObject(rawResponse);
+            return jsonResponse.optString("response", "No response recieved from ollama");
+        } catch (org.json.JSONException e) {
+            System.err.println("Error while parsing JSON response: " + e.getMessage());
+            return "No response recieved from ollama";
+        }
         // return rawResponse;
     }
     

@@ -16,7 +16,7 @@ import okhttp3.Response;
 
 @SpringBootApplication
 public class App {
-    final static String MODEL = "deepseek-coder-v2:16b";
+    final static String MODEL = "deepseek-coder-v2";
     final static String OLLAMA_API_URL = "http://localhost:11434/api/generate";
 
     public static void main(String[] args) {
@@ -39,9 +39,14 @@ public class App {
             }
 
             JSONObject NLP_PROMPT_JSON = new JSONObject();
-            NLP_PROMPT_JSON.put("query", userPrompt);
-            NLP_PROMPT_JSON.put("model", MODEL);  // lowercase
-            NLP_PROMPT_JSON.put("ollama_api_url", OLLAMA_API_URL);  // lowercase
+            try {
+                NLP_PROMPT_JSON.put("query", userPrompt);
+                NLP_PROMPT_JSON.put("model", MODEL);  // lowercase
+                NLP_PROMPT_JSON.put("ollama_api_url", OLLAMA_API_URL);  // lowercase
+            } catch (org.json.JSONException e) {
+                System.err.println("⚠️ Failed to construct JSON object: " + e.getMessage());
+                continue;
+            }
             
 
             RequestBody body = RequestBody.create(
@@ -57,8 +62,16 @@ public class App {
                     
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful() && response.body() != null) {
-                    JSONObject responseJson = new JSONObject(response.body().string());
-                    System.out.println(responseJson.optString("sql", "No SQL returned."));
+                    if (response.body() != null) {
+                        try {
+                            JSONObject responseJson = new JSONObject(response.body().string());
+                            System.out.println(responseJson.optString("sql", "No SQL returned."));
+                        } catch (org.json.JSONException e) {
+                            System.err.println("⚠️ Failed to parse JSON response: " + e.getMessage());
+                        }
+                    } else {
+                        System.out.println("❌ Response body is null.");
+                    }
                 } else {
                     System.out.println("❌ Error from server: " + response.code());
                 }
