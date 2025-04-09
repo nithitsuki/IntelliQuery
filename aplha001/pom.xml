@@ -2,27 +2,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>monza.devs</groupId>
     <artifactId>alpha001</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- ✅ Let Spring Boot manage all the versions -->
+    <!-- ✅ Let Spring Boot manage most versions -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version> <!-- You can change this to latest if needed -->
-        <relativePath/> <!-- leave this -->
+        <version>3.2.2</version>
+        <relativePath/>
     </parent>
 
     <properties>
         <java.version>17</java.version>
+        <javafx.version>21.0.1</javafx.version>
     </properties>
 
     <dependencies>
-        <!-- ✅ Core Spring Boot Starter -->
+        <!-- ✅ Spring Boot Backend -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -31,54 +32,67 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
-        <!-- ✅ REST API Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- ✅ JDBC Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <!-- ✅ MariaDB JDBC Driver -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
 
-        <!-- ✅ OkHttp and JSON -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <!-- <version>4.12.0</version> -->
         </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20250107</version>
         </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>21.0.1</version> <!-- use the version matching your JDK -->
-    </dependency>
 
+        <!-- ✅ JavaFX for GUI frontend -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- ✅ Spring Boot Plugin -->
+            <!-- ✅ Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- ✅ For running CLI main classes if needed -->
+            <!-- ✅ Run JavaFX -->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>monza.devs.client.App</mainClass>
+                </configuration>
+            </plugin>
+
+            <!-- ✅ Optional exec plugin (can use for CLI runners) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -87,16 +101,13 @@
                     <mainClass>monza.devs.InitTest</mainClass>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-                <configuration>
-                <mainClass>monza.devs.client.App</mainClass>
-    </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
 </project>
+<!--
+    ✅ This is a Maven project file (pom.xml) that defines the project structure, dependencies, and build configuration.
+    ✅ It uses Spring Boot for the backend and JavaFX for the GUI frontend.
+    ✅ The project is set up to use Java 17 and includes dependencies for MariaDB, OkHttp, and JSON processing.
+    ✅ The build process is managed by Maven, with plugins for Spring Boot and JavaFX.
+-->
