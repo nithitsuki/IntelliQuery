@@ -1,6 +1,7 @@
 package monza.devs.service;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,11 @@ import okhttp3.Response;
 @Service
 public class LLMService {
     
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+    .connectTimeout(40, TimeUnit.SECONDS)
+    .readTimeout(40, TimeUnit.SECONDS)
+    .writeTimeout(40, TimeUnit.SECONDS)
+    .build();
     /**
      * Sends a prompt to the Ollama API and returns the generated response.
      * <p>
@@ -44,6 +49,8 @@ public class LLMService {
         promptJson.put("prompt", userPrompt);
         promptJson.put("stream", false);
         String prompt = promptJson.toString();
+
+        // System.out.println(prompt);
         
         // Create request body
         RequestBody body = RequestBody.create(prompt, MediaType.get("application/json"));
@@ -55,7 +62,7 @@ public class LLMService {
                 .build();
 
         // Initialize default response
-        String rawResponse = "{\"response\": \"Default\"}";
+        String rawResponse = "{\"response\": \"No response recieved from ollama\"}";
 
         // Execute request
         try (Response response = client.newCall(request).execute()) {
@@ -69,7 +76,8 @@ public class LLMService {
 
         // Parse JSON and return extracted response
         JSONObject jsonResponse = new JSONObject(rawResponse);
-        return jsonResponse.optString("response", "Default");
+        return jsonResponse.optString("response", "No response recieved from ollama");
         // return rawResponse;
     }
+    
 }

@@ -2,6 +2,7 @@ package monza.devs;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
@@ -15,12 +16,16 @@ import okhttp3.Response;
 
 @SpringBootApplication
 public class App {
-    final static String MODEL = "deepseek-coder-v2";
+    final static String MODEL = "deepseek-coder-v2:16b";
     final static String OLLAMA_API_URL = "http://localhost:11434/api/generate";
 
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+        .connectTimeout(40, TimeUnit.SECONDS)
+        .readTimeout(40, TimeUnit.SECONDS)
+        .writeTimeout(40, TimeUnit.SECONDS)
+        .build();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -42,7 +47,9 @@ public class App {
             RequestBody body = RequestBody.create(
                     NLP_PROMPT_JSON.toString(),
                     MediaType.get("application/json"));
-                    
+
+            System.out.println(NLP_PROMPT_JSON.toString());
+
             Request request = new Request.Builder()
                     .url("http://localhost:8080/to-sql")
                     .post(body)
