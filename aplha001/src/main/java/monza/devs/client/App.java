@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,8 +24,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,35 +48,51 @@ public class App extends Application {
         // Title and input
         Label promptLabel = new Label("Enter your natural language query:");
 
+        // Input field with button inside
         inputField = new TextField();
+        inputField.setPrefHeight(60); // Set the preferred height to make the input field bigger
         inputField.setPromptText("e.g., Show all employees who joined after 2023");
+        inputField.setStyle("-fx-prompt-text-fill: #676767;");
 
         // Button to send query
-        Button sendButton = new Button("Send to Backend");
+        Button sendButton = new Button("↑");
+        sendButton.setStyle("-fx-background-radius: 50%; -fx-min-width: 55px; -fx-min-height: 55px; -fx-max-width: 55px; -fx-max-height: 55px; -fx-background-color: #676767; -fx-text-fill: #000000; -fx-font-size: 28px;");
         sendButton.setOnAction(e -> handleSend());
+
+        // HBox to combine input field and button
+        HBox inputContainer = new HBox(inputField, sendButton);
+        inputContainer.setSpacing(5); // Add some spacing between the input field and button
+        HBox.setHgrow(inputField, Priority.ALWAYS); // Allow the input field to grow
+
+        // Layout: top input
+        VBox inputBox = new VBox(5, promptLabel, inputContainer);
+        inputBox.setPadding(new Insets(0));
+        // Final layout with updated input box margins and height
+        inputBox.setPadding(new Insets(10, 50, 0, 50)); // Add equal left and right margins
+
 
         // Output fields
         sqlField = new TextField();
         sqlField.setEditable(false);
         sqlField.setPromptText("Generated SQL");
+        sqlField.setStyle("-fx-background-color: #212121; -fx-text-fill: white; -fx-prompt-text-fill: #676767;");
 
         sqlOutputArea = new TextArea();
         sqlOutputArea.setEditable(false);
         sqlOutputArea.setWrapText(true);
         sqlOutputArea.setPromptText("SQL Query Output");
+        sqlOutputArea.setStyle("-fx-control-inner-background: #212121; -fx-text-fill: white; -fx-prompt-text-fill: #676767; -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0.3px; -fx-effect: null;");
 
         explanationArea = new TextArea();
         explanationArea.setEditable(false);
         explanationArea.setWrapText(true);
         explanationArea.setPromptText("LLM Explanation");
+        explanationArea.setStyle("-fx-control-inner-background: #212121; -fx-text-fill: white; -fx-prompt-text-fill: #676767; -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 0.3px; -fx-effect: null;");
 
         userPromptField = new TextField();
         userPromptField.setEditable(false);
         userPromptField.setPromptText("User Prompt");
-
-        // Layout: top input
-        VBox inputBox = new VBox(5, promptLabel, inputField, sendButton);
-        inputBox.setPadding(new Insets(10));
+        userPromptField.setStyle("-fx-background-color: #212121; -fx-text-fill: white; -fx-prompt-text-fill: #676767;");
 
         // Layout: userPrompt and SQL fields
         GridPane topOutputs = new GridPane();
@@ -99,11 +119,110 @@ public class App extends Application {
         HBox.setHgrow(sqlOutputArea, Priority.ALWAYS);
         HBox.setHgrow(explanationArea, Priority.ALWAYS);
 
-        // Final layout
-        VBox root = new VBox(10, inputBox, topOutputs, bottomOutputs);
-        Scene scene = new Scene(root, 800, 500);
-        scene.getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
+        // Custom undecorated window with black titlebar
+        HBox titleBar = new HBox();
+        titleBar.setStyle("-fx-background-color: black;");
+        titleBar.setPadding(new Insets(5));
+        titleBar.setSpacing(10);
+        titleBar.setAlignment(Pos.CENTER_LEFT);
+        // Somewhere to store the initial offset
+                // Helper class to store x/y offset
+                class Delta {double x, y;}
+        
+        final Delta dragDelta = new Delta();
 
+        // Capture initial click offset from top-left of the window
+        titleBar.setOnMousePressed(event -> {
+            dragDelta.x = event.getScreenX() - primaryStage.getX();
+            dragDelta.y = event.getScreenY() - primaryStage.getY();
+        });
+
+        // Update window position based on initial offset
+        titleBar.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - dragDelta.x);
+            primaryStage.setY(event.getScreenY() - dragDelta.y);
+        });
+
+
+        // Title label (centered using StackPane)
+        Label titleLabel = new Label("IntelliQuery");
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16;");
+
+        // This StackPane will center the title
+        StackPane titleWrapper = new StackPane(titleLabel);
+        HBox.setHgrow(titleWrapper, Priority.ALWAYS);
+        titleWrapper.setAlignment(Pos.CENTER);
+
+        // Minimize button
+        Button minimizeButton = new Button("⎯");
+        minimizeButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        minimizeButton.setOnAction(e -> primaryStage.setIconified(true));
+
+        // Maximize/Restore button
+        Button maximizeButton = new Button("☐");
+        maximizeButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        maximizeButton.setOnAction(e -> {
+            if (primaryStage.isMaximized()) {
+                primaryStage.setMaximized(false);
+            } else {
+                primaryStage.setMaximized(true);
+            }
+        });
+
+        // Close button
+        Button closeButton = new Button("⨉");
+        closeButton.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+        closeButton.setOnAction(e -> primaryStage.close());
+
+        for (Button btn : new Button[]{minimizeButton, maximizeButton, closeButton}) {
+            btn.setStyle("-fx-background-color: black; -fx-text-fill: white;");
+            btn.setFocusTraversable(false); // avoid that annoying dotted outline
+        }
+
+
+        // Right-side button container
+        HBox buttonBox = new HBox(minimizeButton, maximizeButton, closeButton);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+
+        // Add everything to titleBar
+        titleBar.getChildren().addAll(titleWrapper, buttonBox);
+        
+        // Add title bar to the root layout
+        VBox root = new VBox(titleBar);
+        root.getChildren().addAll(topOutputs, bottomOutputs, inputBox);
+
+
+        // VBox root = new VBox(10, topOutputs, bottomOutputs, inputBox);
+        Scene scene = new Scene(root, 800, 600); // Increase overall height of the scene
+        scene.getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
+        final int RESIZE_MARGIN = 6;
+        scene.setOnMouseMoved(event -> {
+            boolean resizeH = event.getSceneX() > scene.getWidth() - RESIZE_MARGIN;
+            boolean resizeV = event.getSceneY() > scene.getHeight() - RESIZE_MARGIN;
+            if (resizeH && resizeV) {
+                scene.setCursor(Cursor.SE_RESIZE);
+            } else if (resizeH) {
+                scene.setCursor(Cursor.E_RESIZE);
+            } else if (resizeV) {
+                scene.setCursor(Cursor.S_RESIZE);
+            } else {
+                scene.setCursor(Cursor.DEFAULT);
+            }
+        });
+
+        scene.setOnMouseDragged(event -> {
+            if (scene.getCursor() == Cursor.SE_RESIZE) {
+                primaryStage.setWidth(event.getSceneX());
+                primaryStage.setHeight(event.getSceneY());
+            } else if (scene.getCursor() == Cursor.E_RESIZE) {
+                primaryStage.setWidth(event.getSceneX());
+            } else if (scene.getCursor() == Cursor.S_RESIZE) {
+                primaryStage.setHeight(event.getSceneY());
+            }
+        });
+
+
+        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setTitle("IntelliQuery — Natural Language to SQL");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -117,48 +236,7 @@ private void handleSend() {
     }
 
     userPromptField.setText(query);
-
-    // Make HTTP request to backend
     
-    // new Thread(() -> {
-    //     OkHttpClient client = new OkHttpClient();
-
-    //     // Create JSON body
-    //     JSONObject json = new JSONObject();
-    //     try {
-    //         json.put("query", query);
-    //         json.put("model", "deepseek-coder-v2");
-    //         json.put("ollama_api_url", "http://localhost:11434/api/generate");
-    //     } catch (org.json.JSONException e) {
-    //         javafx.application.Platform.runLater(() ->
-    //             sqlField.setText("❌ JSON creation error: " + e.getMessage())
-    //         );
-    //         return;
-    //     }
-
-    //     // Build request
-    //     Request request = new Request.Builder()
-    //         .url("http://localhost:8080/to-sql")
-    //         .post(RequestBody.create(json.toString(), MediaType.parse("application/json")))
-    //         .build();
-
-    //     try (Response response = client.newCall(request).execute()) {
-    //         String body = response.body() != null ? response.body().string() : "(No response)";
-    //         System.out.println("Response: " + body); // Debugging line
-    //         // String body = response.body() != null ? response.body().string() : "(No response)";
-    //         Pattern pattern = Pattern.compile("```sql\\\\n(.*?)\\\\n```");
-    //         Matcher matcher = pattern.matcher(body);            
-    //         String extractedSQL = matcher.find() ? matcher.group(1) : "(No SQL found)";
-    //         String finalSQL = extractedSQL;
-    //         javafx.application.Platform.runLater(() -> sqlField.setText(finalSQL));
-    //     } catch (IOException e) {
-    //         javafx.application.Platform.runLater(() ->
-    //             sqlField.setText("❌ HTTP error: " + e.getMessage())
-    //         );
-
-            
-    //     }
-    // }).start();
     new Thread(() -> {
         OkHttpClient client = new OkHttpClient();
     
@@ -261,7 +339,52 @@ private void handleSend() {
             }
 
             javafx.application.Platform.runLater(() -> sqlOutputArea.setText(formatted.toString()));
-        } else {
+
+            // Step 3: Send request to /explain
+        JSONObject explainJson = new JSONObject();
+        try {
+            explainJson.put("model", "deepseek-coder-v2");
+            explainJson.put("ollama_api_url", "http://localhost:11434/api/generate");
+            explainJson.put("prompt", query);
+            explainJson.put("query", finalSQL);
+            explainJson.put("sql_output", resultArray.toString());
+            
+            System.out.println("Explain JSON: " + explainJson.toString()); // Debugging line
+        } catch (org.json.JSONException e) {
+            javafx.application.Platform.runLater(() -> 
+                explanationArea.setText("❌ Explain JSON creation error: " + e.getMessage())
+            );
+            return;
+        }
+        javafx.application.Platform.runLater(() -> explanationArea.setText("🤖 AI thinking..."));
+
+        OkHttpClient explainClient = new OkHttpClient.Builder()
+            .callTimeout(60, java.util.concurrent.TimeUnit.SECONDS) // Set timeout to 60 seconds
+            .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+            .build();
+
+        Request explainRequest = new Request.Builder()
+            .url("http://localhost:8080/explain")
+            .post(RequestBody.create(explainJson.toString(), MediaType.parse("application/json")))
+            .build();
+
+        try (Response explainResponse = explainClient.newCall(explainRequest).execute()) {
+            if (explainResponse.body() != null) {
+                JSONObject explainResponseJson = new JSONObject(explainResponse.body().string());
+                String tempExplainBody = explainResponseJson.optString("explaination", "(No explanation found)");
+                javafx.application.Platform.runLater(() -> explanationArea.setText(tempExplainBody));
+            } else {
+                javafx.application.Platform.runLater(() -> explanationArea.setText("(No explanation response)"));
+            }
+        } catch (IOException e) {
+            javafx.application.Platform.runLater(() -> 
+            explanationArea.setText("❌ Explain HTTP error: " + e.getMessage())
+            );
+        }
+    }
+    else {
             javafx.application.Platform.runLater(() -> sqlOutputArea.setText("(No results)"));
         }
     } else {

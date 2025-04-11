@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -115,20 +114,20 @@ public class QueryController {
     // 📖 Explain result only
     @PostMapping("/explain")
     public ResponseEntity<Map<String, String>> explainResult(@RequestBody Map<String, String> body) {
-        String query = body.get("query");
         String model = body.get("model");
         String apiUrl = body.get("ollama_api_url");
-        String prompt = body.get("prompt");
+        String userprompt = body.get("prompt");
         String sql_output = body.get("sql_output");
+        String sqlquery = body.get("query");
 
-        if (query == null || model == null || apiUrl == null) {
+        if (sqlquery == null || model == null || apiUrl == null) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Missing required fields: 'query', 'model', or 'ollama_api_url'"));
         }
 
-        String sql = sqlRelateedService.explainSQL(model, apiUrl, prompt, query, sql_output);
+        String explaination = sqlRelateedService.explainSQL(model, apiUrl, userprompt, sqlquery, sql_output);
 
-        return ResponseEntity.ok(Map.of("sql", sql));
+        return ResponseEntity.ok(Map.of("explaination", explaination));
 
     }
 
