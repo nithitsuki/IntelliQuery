@@ -27,6 +27,8 @@ public class SqlRelateedService {
             - `nationality` (VARCHAR): The nationality of the employee
             - `canteen_money` (INT): The amount of money allocated for the employee's canteen expenses
             - `average_work_time` (INT): The average time (in years) employees have worked in the company
+            - `location` (VARCHAR): The location of the employee (e.g., Koramangala, Indiranagar, Whitefield)
+            - `phone_number` (VARCHAR): The phone number of the employee
             Generate a valid SINGLE LINE SQL query based on the following natural language request
             and just say the sql query without any explanation or additional text:
             dont display their age, joindate, age, gender, nationality, canteen_money unless the user explicitly asks for more columns.
@@ -35,6 +37,9 @@ public class SqlRelateedService {
             Make sure the Sql statement is in one line without any newlines or line breaks.
             Just say the SQL query without any explanation or additional text.
             SELECT name, department, salary FROM employees WHERE average_work_time < 2 AND id NOT IN (SELECT id FROM employees ORDER BY salary DESC LIMIT 2);
+            If the user asks for people from a particular location, include the `location` column in the SELECT statement and filter the results based on the specified location. For example:
+
+            SELECT name, department, salary, location FROM employees WHERE location = 'Koramangala';
             """.stripIndent() + naturalLanguageQuery + """
             """;
 
