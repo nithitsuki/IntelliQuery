@@ -45,7 +45,7 @@ public class DatabaseInitializer {
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     "Bob", "Backend Development", Date.valueOf("2025-01-15"), 105000, 30, "British", "Male", 4500, 5);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    "Charlie", "System Administration", Date.valueOf("2023-11-20"), 98000, 28, "Canadian", "Male", 4800, 6);
+                    "Charlie", "System Administration", Date.valueOf("2023-11-20"), 98000, 28, "Canadian", "Male", 4800, 2);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     "Diana", "Quality Assurance", Date.valueOf("2022-09-10"), 120000, 35, "Indian", "Female", 4700, 3);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -53,7 +53,7 @@ public class DatabaseInitializer {
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     "Fiona", "UI/UX Design", Date.valueOf("2023-01-10"), 110000, 32, "German", "Female", 4600, 4);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    "Ron", "Database Administration", Date.valueOf("2011-01-10"), 150000, 40, "English", "Male", 5000, 6);
+                    "Ron", "Database Administration", Date.valueOf("2011-01-10"), 150000, 40, "English", "Male", 5000, 2);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     "Aditi", "CEO", Date.valueOf("2010-01-01"), 145000, 38, "Indian", "Female", 5000, 5);
             jdbc.update("INSERT INTO employees (name, department, join_date, salary, age, nationality, gender, canteen_money, avg_work_hours) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
