@@ -36,10 +36,10 @@ public class SqlRelateedService {
             If the user requests to add money or get a hike in total salary, calculate the updated salary dynamically in the query but do not persist it in the database.
             Make sure the Sql statement is in one line without any newlines or line breaks.
             Just say the SQL query without any explanation or additional text.
-            SELECT name, department, salary FROM employees WHERE average_work_time < 2 AND id NOT IN (SELECT id FROM employees ORDER BY salary DESC LIMIT 2);
-            If the user asks for people from a particular location, include the `location` column in the SELECT statement and filter the results based on the specified location. For example:
+            
+            
 
-            SELECT name, department, salary, location FROM employees WHERE location = 'Koramangala';
+            
             """.stripIndent() + naturalLanguageQuery + """
             """;
 
