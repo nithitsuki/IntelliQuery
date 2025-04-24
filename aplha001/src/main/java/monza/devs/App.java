@@ -16,7 +16,7 @@ import okhttp3.Response;
 
 @SpringBootApplication
 public class App {
-    final static String MODEL = "deepseek-coder-v2";
+    final static String MODEL = "deepseek-coder-v2:latest";
     final static String OLLAMA_API_URL = "http://localhost:11434/api/generate";
 
     public static void main(String[] args) {

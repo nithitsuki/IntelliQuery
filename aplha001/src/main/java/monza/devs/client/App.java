@@ -236,7 +236,7 @@ private void handleSend() {
     }
 
     userPromptField.setText(query);
-    final String LLM_MODEL = "deepseek-coder-v2";
+    final String LLM_MODEL = "deepseek-coder-v2:latest";
     new Thread(() -> {
         OkHttpClient client = new OkHttpClient();
     
