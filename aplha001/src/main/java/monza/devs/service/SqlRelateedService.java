@@ -27,10 +27,7 @@ public class SqlRelateedService {
             
             Generate a valid SINGLE LINE SQL query based on the following natural language request
             and just say the sql query without any explanation or additional text:
-
-            dont display their age, join_date, salary, gender unless the user explicitly asks for more columns.
-            Try to always list the name in the select statement.
-
+            
             Make sure the SQL statement is in one line without any newlines or line breaks.
             Just say the SQL query without any explanation or additional text.
             """.stripIndent() + naturalLanguageQuery + """
