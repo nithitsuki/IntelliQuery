@@ -17,20 +17,17 @@ public class SqlRelateedService {
         String schemaPrompt = """
             You are provided with a database that contains a table named `employees` with the following columns:
 
-            - `id` (INT, Primary Key, Auto Increment)
+            - `id` (INT, Primary Key)
             - `name` (VARCHAR): The name of the employee
             - `department` (VARCHAR): The department the employee belongs to
             - `join_date` (DATE): The date the employee joined the company
             - `salary` (INT): The employee's annual salary in USD
             - `age` (INT): The age of the employee in years
-            - `gender` (VARCHAR): The gender of the employee (e.g., Male/Female/Other)
-            - `nationality` (VARCHAR): The nationality of the employee
-            - `canteen_money` (INT): The amount of money allocated for the employee's canteen expenses
-            - `average_work_time` (INT): The average time (in years) employees have worked in the company
-            - `location` (VARCHAR): The location of the employee (e.g., Koramangala, Indiranagar, Whitefield)
-            - `phone_number` (VARCHAR): The phone number of the employee
+            - `gender` (VARCHAR): The gender of the employee (e.g., Male/Female)
+            
             Generate a valid SINGLE LINE SQL query based on the following natural language request
             and just say the sql query without any explanation or additional text:
+<<<<<<< Updated upstream
             dont display their age, joindate, age, gender, nationality, canteen_money unless the user explicitly asks for more columns.
             Try to always list the employee name and in the select statement.
             If the user requests to add money or get a hike in total salary, calculate the updated salary dynamically in the query but do not persist it in the database.
@@ -40,6 +37,14 @@ public class SqlRelateedService {
             
 
             
+=======
+
+            dont display their age, join_date, salary, gender unless the user explicitly asks for more columns.
+            Try to always list the name in the select statement.
+
+            Make sure the SQL statement is in one line without any newlines or line breaks.
+            Just say the SQL query without any explanation or additional text.
+>>>>>>> Stashed changes
             """.stripIndent() + naturalLanguageQuery + """
             """;
 

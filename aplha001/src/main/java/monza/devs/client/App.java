@@ -236,7 +236,7 @@ private void handleSend() {
     }
 
     userPromptField.setText(query);
-    
+    final String LLM_MODEL = "deepseek-coder-v2";
     new Thread(() -> {
         OkHttpClient client = new OkHttpClient();
     
@@ -244,7 +244,7 @@ private void handleSend() {
         JSONObject json = new JSONObject();
         try {
             json.put("query", query);
-            json.put("model", "deepseek-coder-v2");
+            json.put("model", LLM_MODEL);
             json.put("ollama_api_url", "http://localhost:11434/api/generate");
         } catch (org.json.JSONException e) {
             javafx.application.Platform.runLater(() ->
@@ -267,7 +267,8 @@ private void handleSend() {
             Matcher matcher = pattern.matcher(body);
             String extractedSQL = matcher.find() ? matcher.group(1) : "(No SQL found)";
             String finalSQL = extractedSQL;
-    
+            System.out.println("Extracted SQL: " + finalSQL); // Debugging line
+
             // Show SQL in the UI
             javafx.application.Platform.runLater(() -> sqlField.setText(finalSQL));
     
@@ -343,7 +344,7 @@ private void handleSend() {
             // Step 3: Send request to /explain
         JSONObject explainJson = new JSONObject();
         try {
-            explainJson.put("model", "deepseek-coder-v2");
+            explainJson.put("model", LLM_MODEL);
             explainJson.put("ollama_api_url", "http://localhost:11434/api/generate");
             explainJson.put("prompt", query);
             explainJson.put("query", finalSQL);
