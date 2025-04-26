@@ -1,25 +1,19 @@
-# 🧠 NAME_PENDING — Natural Language to SQL for Non-Tech Users
+# 🧠 intelliquery — Natural Language to SQL for Non-Tech Users
 
-NAME_PENDING is an intelligent Java-powered backend system that allows non-technical users to query relational databases using **natural language**.
+intelliquery is an intelligent Java-powered backend system that allows non-technical users to query relational databases using **natural language**.
 
 It uses a large language model to:
 1. Translate natural language into SQL queries
 2. Run those queries on a MariaDB database using JDBC
 3. Explain the results back in plain English
 
-Built using **Spring Boot** and **OkHttp**, NAME_PENDING supports both:
+Built using **Spring Boot** and **OkHttp**, intelliquery supports both:
 - A powerful **CLI interface** for immediate querying
 - A clean **REST API** that can be consumed by any future frontend
 - We might need to make a web front-end if the teach asks for it
 
 ---
 
-## Possible Candidates for the name
-
-- Project MonzAI 
-- MonzaSentience
-- MonzaMind
-- NEXUS by Monza
 
 ---
 
