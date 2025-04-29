@@ -41,7 +41,7 @@ public class DatabaseInitializer {
         if (count != null && count == 0)
         {
                 jdbc.update("INSERT INTO employees (id, name, department, join_date, salary, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                                1, "Alice", "Frontend Development", Date.valueOf("2024-12-01"), 95000, 25, "Female");
+                                1, "Alice John", "Frontend Development", Date.valueOf("2024-12-01"), 95000, 25, "Female");
                 jdbc.update("INSERT INTO employees (id, name, department, join_date, salary, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?)",
                                 2, "Bob", "Backend Development", Date.valueOf("2025-01-15"), 105000, 30, "Male");
                 jdbc.update("INSERT INTO employees (id, name, department, join_date, salary, age, gender) VALUES (?, ?, ?, ?, ?, ?, ?)",
